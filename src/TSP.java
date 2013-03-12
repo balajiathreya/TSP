@@ -15,6 +15,7 @@ public class TSP {
     public static HashMap<Integer,Point> vertices = new HashMap<Integer, Point>();
     public static ArrayList<Integer> verticesWithOddDegree = new ArrayList<Integer>();
     public static TreeSet<String> completeGraphVertices = new TreeSet<String>();
+    public static TreeSet<String> multiGraph = new TreeSet<String>();
 
     public static void main(String[] args){
         readInput();
@@ -24,12 +25,8 @@ public class TSP {
         System.out.println();
         Iterator it = T.getEdges().iterator();
         getVerticesWithOddDegree(T);
-        getPerfectMatching();
-//        while (it.hasNext()){
-//            String e = (String) it.next();
-//            System.out.println(e);
-//        }
-
+        getPerfectMatching(T);
+        calculateCost();
 
     }
 
@@ -89,7 +86,7 @@ public class TSP {
         }
     }
 
-    public static void getPerfectMatching(){
+    public static void getPerfectMatching(MST T){
         Iterator it1 = verticesWithOddDegree.iterator();
         Iterator it2 = verticesWithOddDegree.iterator();
         while (it1.hasNext()){
@@ -100,12 +97,39 @@ public class TSP {
                     Point p1 = vertices.get(i);
                     Point p2 = vertices.get(j);
                     long distance = MST.getDistance(p1,p2);
-                    completeGraphVertices.add(distance+","+p1.getId()+"-"+p2.getId());
+                    if(p2.getId() > p1.getId())
+                        completeGraphVertices.add(distance+","+p1.getId()+"-"+p2.getId());
+                    else
+                        completeGraphVertices.add(distance+","+p2.getId()+"-"+p1.getId());
                 }
             }
         }
+        Iterator it = T.getEdges().iterator();
+        while (it.hasNext()){
+            String e = it.next().toString();
+            multiGraph.add(e);
+        }
 
-        System.out.println();
+        it = completeGraphVertices.iterator();
+        while (it.hasNext()){
+            String e = it.next().toString();
+            e = e.split(",")[1];
+            multiGraph.add(e);
+        }
+    }
+
+    public static void calculateCost(){
+        Iterator it = multiGraph.iterator();
+        long distance = 0;
+        while (it.hasNext()){
+            String e = it.next().toString();
+            System.out.println(e);
+            String[] arr = e.split("-");
+            Point p1 = vertices.get(Integer.valueOf(arr[0]));
+            Point p2 = vertices.get(Integer.valueOf(arr[1]));
+            distance += MST.getDistance(p1,p2);
+        }
+        System.out.println(distance);
     }
 }
 
