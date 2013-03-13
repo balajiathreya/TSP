@@ -11,19 +11,23 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class TSP {
-    public static String fileName  = "/home/balaji/Downloads/example2.txt";
+    public static String fileName  = "/home/balaji/Downloads/example3.txt";
     public static HashMap<Integer,Point> vertices = new HashMap<Integer, Point>();
     public static ArrayList<Integer> verticesWithOddDegree = new ArrayList<Integer>();
     public static TreeSet<String> completeGraphVertices = new TreeSet<String>();
     public static TreeSet<String> multiGraph = new TreeSet<String>();
+    public static TreeMap<Double,String> edgesByWeight = new TreeMap<Double,String>();
 
     public static void main(String[] args){
         readInput();
         MST T = new MST();
         T.constructMST(vertices);
         LinkedHashSet selectedVertices = T.getSelectedVertices();
+        Iterator it1 = selectedVertices.iterator();
+        while (it1.hasNext()){
+            System.out.println(it1.next().toString());
+        }
         System.out.println();
-        Iterator it = T.getEdges().iterator();
         getVerticesWithOddDegree(T);
         getPerfectMatching(T);
         calculateCost();
@@ -65,8 +69,9 @@ public class TSP {
     }
 
     public static void getVerticesWithOddDegree(MST T){
-        Iterator it = T.getEdges().iterator();
+        Iterator it = T.getSelectedVertices().iterator();
         verticesWithOddDegree = new ArrayList<Integer>();
+        int prev = -1;
         while (it.hasNext()){
             String e = (String) it.next();
             String[] arr = e.split("-");
@@ -127,7 +132,9 @@ public class TSP {
             String[] arr = e.split("-");
             Point p1 = vertices.get(Integer.valueOf(arr[0]));
             Point p2 = vertices.get(Integer.valueOf(arr[1]));
-            distance += MST.getDistance(p1,p2);
+            long d = MST.getDistance(p1,p2);
+            distance += d;
+
         }
         System.out.println(distance);
     }
