@@ -12,17 +12,17 @@ import java.util.concurrent.PriorityBlockingQueue;
  * To change this template use File | Settings | File Templates.
  */
 public class MST {
-//    private LinkedHashSet<String> edges = new LinkedHashSet<String>();
+    private LinkedHashSet<String> edges = new LinkedHashSet<String>();
     private LinkedHashSet<Integer> selectedVertices = new LinkedHashSet<Integer>();
     private PriorityBlockingQueue<Point> pq;
 
-//    public LinkedHashSet<String> getEdges() {
-//        return edges;
-//    }
-//
-//    public void setEdges(LinkedHashSet<String> edges) {
-//        this.edges = edges;
-//    }
+    public LinkedHashSet<String> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(LinkedHashSet<String> edges) {
+        this.edges = edges;
+    }
 
     public LinkedHashSet<Integer> getSelectedVertices() {
         return selectedVertices;
@@ -52,11 +52,11 @@ public class MST {
             Point min = pq.poll();
             if(min != null){
                 selectedVertices.add(min.getId());
-//                addEdge();
+                addEdge();
                 Iterator it = pq.iterator();
                 while (it.hasNext()){
                     Point point = (Point)it.next();
-                    if(!point.equals(min)){
+                    if(pq.contains(point) && !point.equals(min)){
                         long distance = getDistance(point,min);
                         if(point.getCost() > distance){
                             point.setCost(distance);
@@ -86,22 +86,22 @@ public class MST {
         }
     }
 
-//    public void addEdge(){
-//        if(selectedVertices.size() > 1){
-//            int current = (Integer)selectedVertices.toArray()[selectedVertices.size() - 1];
-//            int prev = (Integer)selectedVertices.toArray()[selectedVertices.size() - 2];
-//            if(current > prev){
-//                String edge = prev+"-"+current;
-//                if(!edges.contains(edge))
-//                    edges.add(edge);
-//            }
-//            else if(current < prev){
-//                String edge = current+"-"+prev;
-//                if(!edges.contains(edge))
-//                    edges.add(edge);
-//            }
-//        }
-//    }
+    public void addEdge(){
+        if(selectedVertices.size() > 1){
+            int current = (Integer)selectedVertices.toArray()[selectedVertices.size() - 1];
+            int prev = (Integer)selectedVertices.toArray()[selectedVertices.size() - 2];
+            if(current > prev){
+                String edge = prev+"-"+current;
+                if(!edges.contains(edge))
+                    edges.add(edge);
+            }
+            else if(current < prev){
+                String edge = current+"-"+prev;
+                if(!edges.contains(edge))
+                    edges.add(edge);
+            }
+        }
+    }
 }
 
 class CostComparator implements Comparator<Point>{
